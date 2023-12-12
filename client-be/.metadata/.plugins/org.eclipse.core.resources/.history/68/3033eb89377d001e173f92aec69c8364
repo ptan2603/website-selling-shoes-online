@@ -1,0 +1,8 @@
+package com.poly.bangiaybe.service;
+
+import com.poly.bangiaybe.dto.Req.ReqOrderDto;
+import com.poly.bangiaybe.entity.Order;
+
+public interface OrderService {
+	Order createOrder(ReqOrderDto reqOrderDto) ;
+}

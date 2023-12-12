@@ -1,0 +1,5 @@
+package com.poly.bangiaybe.model;
+
+public class CustomUserDetails {
+
+}

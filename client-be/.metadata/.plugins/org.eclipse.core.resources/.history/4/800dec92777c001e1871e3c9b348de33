@@ -1,0 +1,5 @@
+package com.poly.bangiaybe.dto;
+
+public class AccountDto {
+
+}

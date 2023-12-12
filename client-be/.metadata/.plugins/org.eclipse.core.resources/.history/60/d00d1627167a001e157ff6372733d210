@@ -1,0 +1,29 @@
+package com.poly.bangiaybe.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.poly.bangiaybe.service.AccountService;
+import com.poly.bangiaybe.constant.AccountConst;
+
+@RestController
+public class loginControl {
+	
+    @Autowired
+    JwtTokenProvider tokenProvider;
+	
+	@Autowired
+    AccountService accountService;
+
+	@GetMapping(AccountConst.API_ACCOUNT_FIND_ME)
+    public ResponseEntity<?> getUser(@RequestParam("token") String token) {
+        if(tokenProvider.validateToken(token)){
+            String username = tokenProvider.getUsernameFromJWT(token);
+            return new ResponseEntity<>(accountService.findByUsername(username), HttpStatus.OK);
+        }
+        return null;
+    }
+}

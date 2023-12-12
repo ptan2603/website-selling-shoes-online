@@ -1,0 +1,73 @@
+package com.poly.bangiaybe.serviceimpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.poly.bangiaybe.constant.CartItemConst;
+import com.poly.bangiaybe.constant.Const;
+import com.poly.bangiaybe.constant.OrderConst;
+import com.poly.bangiaybe.constant.ProductConst;
+import com.poly.bangiaybe.dto.Req.ReqCartItemDto;
+import com.poly.bangiaybe.dto.Resp.RespCartItemDto;
+import com.poly.bangiaybe.entity.Account;
+import com.poly.bangiaybe.entity.Attribute;
+import com.poly.bangiaybe.entity.CartItem;
+import com.poly.bangiaybe.exception.AppException;
+import com.poly.bangiaybe.repository.CartItemRepo;
+import com.poly.bangiaybe.service.AccountService;
+import com.poly.bangiaybe.service.AttributeService;
+import com.poly.bangiaybe.service.CartItemService;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class CartItemServiceImpl implements CartItemService {
+	@Autowired
+    CartItemRepo cartItemRepo;
+	
+    @Autowired
+    AttributeService attributeService;
+    
+    @Autowired
+    AccountService accountService;
+    
+
+    @Override
+    public Boolean isEnoughStock(Long id, Integer quantity) {
+        Attribute attribute = attributeService.findById(id);
+        if(attribute.getStock() < quantity){
+        	throw new AppException(OrderConst.CART_ITEM_MSG_ERROR_NOT_ENOUGH);
+        }
+        return true;
+    }
+    
+    @Override
+    public List<CartItem> findAll() {
+        return cartItemRepo.findAll();
+    }
+
+
+    @Override
+    public CartItem saveCartItem(CartItem cartItem) {
+        return cartItemRepo.save(cartItem);
+    }
+
+
+	@Override
+	public void removeCartItem(ReqCartItemDto reqCartItemDto) {
+
+		
+	}
+
+
+	@Override
+	public void clearCartItem(Long id) {
+
+		
+	}
+
+
+
+}

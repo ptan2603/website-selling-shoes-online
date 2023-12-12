@@ -1,0 +1,58 @@
+package com.poly.bangiaybe.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Pageable;
+
+import com.poly.bangiaybe.dto.Resp.RespAccountDto;
+import com.poly.bangiaybe.entity.Account;
+
+import javax.transaction.Transactional;
+import java.util.List;
+
+public interface AccountRepo extends JpaRepository<Account, Long> {
+	
+	@Query("SELECT a FROM Account a WHERE a.username = :username AND a.password = :password")
+	Account findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+	
+	//truy vấn lấy danh sách các tài khoản (RespAccountDto) cùng với thông tin liên quan bằng cách kết hợp các bảng Account, AccountDetail, và Role thông qua các mối quan hệ (join).
+    @Query("SELECT distinct new com.poly.bangiaybe.dto.Resp.RespAccountDto( a.id, a.username, a.createDate, a.modifyDate, a.isActive , r.name," +
+            " ad.fullname, ad.gender, ad.phone, ad.email, ad.address, ad.birthDate ) FROM Account a " +
+            "inner join AccountDetail ad on a.id = ad.account.id " +
+            "inner join Role r on a.role.id = r.id")
+    List<RespAccountDto> findAllSecond(Pageable pageable);
+    
+  //trả về thông tin của một tài khoản cụ thể dựa trên id.
+    @Query("SELECT new com.poly.bangiaybe.dto.Resp.RespAccountDto(a.id, a.username, a.createDate, a.modifyDate, a.isActive , r.name," +
+            " ad.fullname, ad.gender, ad.phone, ad.email, ad.address, ad.birthDate) FROM Account a " +
+            "inner join AccountDetail ad on a.id = ad.account.id " +
+            "inner join Role r on a.role.id = r.id where a.id = ?1")
+    RespAccountDto findByIdSecond(Long id);
+    
+  //truy vấn để tìm một tài khoản dựa trên tên người dùng (username).
+    @Query("SELECT new com.poly.bangiaybe.dto.Resp.RespAccountDto(a.id, a.username, a.createDate, a.modifyDate, a.isActive , r.name," +
+            " ad.fullname, ad.gender, ad.phone, ad.email, ad.address, ad.birthDate) FROM Account a " +
+            "inner join AccountDetail ad on a.id = ad.account.id " +
+            "inner join Role r on a.role.id = r.id where a.username = ?1")
+    RespAccountDto findByUsername(String username);
+    
+    Account findAccountByUsername(String username);
+    
+  //Truy vấn này trả về danh sách tài khoản dựa trên trạng thái kích hoạt hoặc không kích hoạt và sử dụng phân trang.
+    @Query("SELECT a.id, a.username, a.createDate, a.modifyDate, a.isActive , r.name," +
+            " ad.fullname, ad.gender, ad.phone, ad.email, ad.address, ad.birthDate FROM Account a " +
+            "inner join AccountDetail ad on a.id = ad.account.id " +
+            "inner join Role r on a.role.id = r.id where a.isActive = ?1")
+    List<Object[]> findAccountByIsActiveOrInactive(Boolean isActive, Pageable pageable);
+    
+    
+    @Transactional
+    @Modifying
+    // truy vấn update được sử dụng để thay đổi trạng thái kích hoạt của tài khoản dựa trên id.
+    @Query("update Account a set a.isActive = ?1 where a.id = ?2")
+    void deleteOrRestore(Boolean isActive, Long id);
+    
+    
+}

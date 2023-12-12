@@ -1,0 +1,5 @@
+package com.poly.bangiaybe.config;
+
+public class WebSecurityConfig {
+
+}

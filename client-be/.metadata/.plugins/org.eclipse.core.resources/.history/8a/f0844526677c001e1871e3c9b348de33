@@ -1,0 +1,87 @@
+package com.poly.bangiaybe.controller;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Sort;
+
+import com.poly.bangiaybe.constant.AccountConst;
+import com.poly.bangiaybe.dto.Req.ReqCreateAccountDto;
+import com.poly.bangiaybe.dto.Req.ReqRegisterAccountDto;
+import com.poly.bangiaybe.dto.Resp.RespAccountDto;
+import com.poly.bangiaybe.entity.Account;
+import com.poly.bangiaybe.repository.AccountRepo;
+import com.poly.bangiaybe.service.AccountService;
+import com.poly.bangiaybe.util.ConvertUtil;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@RestController
+@CrossOrigin("*")
+public class AccountControl {
+    @Autowired
+    private AccountService accountService;
+    
+    @Autowired
+    AccountRepo accountRepo;
+    
+    @Autowired
+    private BCryptPasswordEncoder bcryptPasswordEncoder;
+    
+	@GetMapping(AccountConst.API_ACCOUNT_FIND_ALL)
+	 public ResponseEntity<?> findAll(@RequestParam("page") Optional<Integer> page,
+	                                  @RequestParam("size") Optional<Integer> size) {
+	 Pageable pageable = PageRequest.of(page.orElse(1) - 1, size.orElse(9), Sort.Direction.DESC, "modifyDate");
+	 	return new ResponseEntity<>(this.accountService.findAllSecond(pageable), HttpStatus.OK);
+	 }
+	    
+	 @GetMapping(AccountConst.API_ACCOUNT_FIND_BY_ID)
+	   public ResponseEntity<?> findById(@PathVariable Long id) {
+	      return new ResponseEntity<>(this.accountService.findByIdSecond(id), HttpStatus.OK);
+	   }
+	 
+	 @GetMapping(AccountConst.API_ACCOUNT_FIND_BY_USERNAME)
+	    public ResponseEntity<?> findByUsername(@RequestParam("username") String username) {
+	        return new ResponseEntity<>(this.accountService.findByUsername(username), HttpStatus.OK);
+	    }
+	 
+	 
+	 @PostMapping(AccountConst.API_ACCOUNT_REGISTER)
+	    public ResponseEntity<?> register(@RequestBody @Valid ReqRegisterAccountDto reqRegisterAccountDto){
+	        return new ResponseEntity<>(this.accountService.register(reqRegisterAccountDto), HttpStatus.OK);
+	    }
+	 
+	 @PostMapping("/api/account/login")
+	 public ResponseEntity<?> login(@RequestBody Account account){
+	     List<Account> logins = accountRepo.findByUsernameAndPassword(account.getUsername(), account.getPassword());
+	     return new ResponseEntity<>(logins, HttpStatus.OK);
+	 }
+	 
+	    // đếm
+	 @GetMapping(AccountConst.API_ACCOUNT_COUNT)
+	    public ResponseEntity<?> countAccount(){
+	        return new ResponseEntity<>(accountService.countAccount(), HttpStatus.OK);
+	    }
+	 
+	 @GetMapping(AccountConst.API_ACCOUNT_TOTAL_PAGE)
+	    public ResponseEntity<?> getTotalPage() {
+	        return new ResponseEntity<>(this.accountService.getToTalPage(), HttpStatus.OK);
+	    }
+	 
+	    
+}

@@ -1,0 +1,27 @@
+package com.poly.bangiaybe.controller;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.poly.bangiaybe.constant.OrderConst;
+import com.poly.bangiaybe.dto.Req.ReqOrderDto;
+import com.poly.bangiaybe.service.OrderService;
+
+@RestController
+@CrossOrigin("*")
+public class OrderControl {
+	@Autowired
+    OrderService orderService;
+	
+    @PostMapping(OrderConst.API_ORDER_CREATE)
+    public ResponseEntity<?> createOrder(@Valid @RequestBody ReqOrderDto reqOrderDto){
+        return new ResponseEntity<>(orderService.createOrder(reqOrderDto), HttpStatus.OK);
+    }
+}

@@ -1,0 +1,5 @@
+package com.poly.bangiaybe.payload;
+
+public class LoginResponse {
+
+}

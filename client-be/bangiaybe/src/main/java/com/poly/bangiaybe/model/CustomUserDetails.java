@@ -1,0 +1,58 @@
+package com.poly.bangiaybe.model;
+
+import java.util.Collection;
+import java.util.Collections;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.poly.bangiaybe.entity.Account;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class CustomUserDetails implements UserDetails {
+	
+	private Account account;
+	
+	@Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority(account.getRole().getName()));
+    }
+	
+	@Override
+    public String getPassword() {
+        return account.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return account.getUsername();
+    }
+// Trả về true nếu tài khoản của người dùng chưa hết hạn
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+//Trả về true nếu tài khoản của người dùng không bị khóa.
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+//Trả về true nếu thông tin xác thực của người dùng không hết hạn.
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    
+    
+}

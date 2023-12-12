@@ -1,0 +1,113 @@
+package com.poly.bangiaybe.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Collection;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@Table(name = "accounts")
+public class Account {
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+	
+    @Column(name = "username", nullable = false, unique = true, length = 50)
+    private String username;
+    
+    @Column(name = "password",nullable = false, length = 255)
+    private String password;
+    
+    @Column(name = "create_date", nullable = false)
+    private LocalDate createDate;
+    
+    @Column(name = "modify_date", nullable = false)
+    private LocalDate modifyDate;
+    
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+    
+    @OneToMany(mappedBy = "account")
+    @JsonIgnore
+    private Collection<CartItem> cartItems;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public LocalDate getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(LocalDate createDate) {
+		this.createDate = createDate;
+	}
+
+	public LocalDate getModifyDate() {
+		return modifyDate;
+	}
+
+	public void setModifyDate(LocalDate modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public Collection<CartItem> getCartItems() {
+		return cartItems;
+	}
+
+	public void setCartItems(Collection<CartItem> cartItems) {
+		this.cartItems = cartItems;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+    
+}

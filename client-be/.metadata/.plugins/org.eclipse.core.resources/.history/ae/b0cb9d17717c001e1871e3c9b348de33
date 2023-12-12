@@ -1,0 +1,54 @@
+package com.poly.bangiaybe.serviceimpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.poly.bangiaybe.dto.Req.ReqUpdateAccountDetailDto;
+import com.poly.bangiaybe.entity.AccountDetail;
+import com.poly.bangiaybe.repository.AccountDetailRepo;
+import com.poly.bangiaybe.service.AccountDetailService;
+
+@Service
+public class AccountDetailSeImpl implements AccountDetailService {
+	
+    @Autowired
+    AccountDetailRepo accountDetailRepo;
+    
+    @Override
+    public AccountDetail findAccountDetail(Long id) {
+        return accountDetailRepo.findAccountDetailByAccount_Id(id);
+    }
+    
+    @Override
+    public AccountDetail findAccountDetailByEmail(String email) {
+        return this.accountDetailRepo.findAccountDetailByEmail(email);
+    }
+    
+    @Override
+    public AccountDetail update(ReqUpdateAccountDetailDto reqUpdateAccountDetailDto) {
+        AccountDetail accountDetail = findAccountDetail(reqUpdateAccountDetailDto.getId());
+        accountDetail.setFullname(reqUpdateAccountDetailDto.getFullname());
+        accountDetail.setPhone(reqUpdateAccountDetailDto.getPhone());
+        accountDetail.setEmail(reqUpdateAccountDetailDto.getEmail());
+        accountDetail.setAddress(reqUpdateAccountDetailDto.getAddress());
+        accountDetail.setGender(reqUpdateAccountDetailDto.getGender());
+        return accountDetailRepo.save(accountDetail);
+    }
+    
+    @Override
+    public void update(AccountDetail accountDetail) {
+        this.accountDetailRepo.update(accountDetail.getFullname(), 
+        							  accountDetail.getGender(), 
+        							  accountDetail.getPhone(), 
+        							  accountDetail.getEmail(), 
+        							  accountDetail.getAddress(), 
+        							  accountDetail.getBirthDate(), 
+        							  accountDetail.getAccount().getId());
+    }
+
+    @Override
+    public AccountDetail save(AccountDetail accountDetail) {
+        return this.accountDetailRepo.save(accountDetail);
+    }
+    
+}

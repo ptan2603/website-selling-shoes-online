@@ -1,0 +1,5 @@
+package com.poly.bangiaybe.repository;
+
+public interface OrderRepo {
+
+}

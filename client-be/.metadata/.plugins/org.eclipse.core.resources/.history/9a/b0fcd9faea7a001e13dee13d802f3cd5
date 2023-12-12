@@ -1,0 +1,20 @@
+package com.poly.bangiaybe.constant;
+
+public class AccountConst {
+	/* Url Api*/
+    public static final String API_ACCOUNT_FIND_ALL_BY_IS_ACTIVE_OR_INACTIVE = "/api/admin/accounts/{isActive}";
+	public static final String API_ACCOUNT_FIND_ALL = "/api/admin/account/find-all";
+    public static final String API_ACCOUNT_FIND_BY_ID = "/api/admin/account/{id}";
+    public static final String API_ACCOUNT_FIND_BY_USERNAME = "/api/account/find-by-username";
+    public static final String API_ACCOUNT_COUNT = "/api/admin/account/count";
+    public static final String API_ACCOUNT_REGISTER = "/api/account/register";
+    public static final String API_ACCOUNT_FIND_ME = "/api/me";
+    public static final String API_ACCOUNT_DETAIL_GET_BY_ACCOUNT_ID = "/api/account/detail";
+    public static final String API_ACCOUNT_DETAIL_UPDATE = "/api/account/detail/update";
+    /* Account constant*/
+    public static final String ACCOUNT_MSG_ERROR_NOT_EXIST = "Tài khoản không tồn tại!";
+    public static final String ACCOUNT_MSG_ERROR_SIGN_IN = "Đăng nhập thất bại!";
+    public static final String ACCOUNT_MSG_ERROR_LOCK = "Tài khoản đã bị khóa!";
+    public static final String ACCOUNT_MSG_ERROR_ACCESS_DENIED = "Bạn không có quyền truy cập!";
+}
+

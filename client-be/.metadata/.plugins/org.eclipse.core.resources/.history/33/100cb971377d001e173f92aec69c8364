@@ -1,0 +1,5 @@
+package com.poly.bangiaybe.entity;
+
+public class OrderDetail {
+
+}
